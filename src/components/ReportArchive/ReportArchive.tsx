@@ -16,5 +16,5 @@ export default function ReportArchive({ categories }: ReportArchiveProps) {
         categories
     );
 
-    return <ReportArchiveView categories={categories} {...viewModel} />;
+    return <ReportArchiveView {...viewModel} />;
 }

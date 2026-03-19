@@ -1,7 +1,8 @@
 "use client";
 
+// サイト共通ヘッダーです。
+// 画面サイズと現在のURLに応じて表示を切り替えます。
 import SearchBox from "@/components/SearchBox/SearchBox";
-import { REPO_URL, SITE_NAME } from "@/lib/site-config";
 import type { Category } from "@/types/types";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -29,36 +30,43 @@ interface HeaderProps {
     categories?: Category[];
 }
 
+const LAB_INTRO_URL = "https://dfchanges.site";
+
 function HeaderContent({ categories = [] }: HeaderProps) {
+    // クライアント側ナビゲーション制御
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
     const [drawerOpen, setDrawerOpen] = useState(false);
 
+    // どのページにいるかでヘッダー表示を変える
     const activeCategorySlug = searchParams.get("category") || "";
     const isHome = pathname === "/";
     const isReports = pathname === "/reports";
     const isReportDetail =
         pathname.startsWith("/reports/") && pathname !== "/reports";
     const showCategoryTabs = (isHome || isReports) && categories.length > 0;
+
     const tabValue = activeCategorySlug || "all";
 
+    // ヘッダータブクリック時の遷移
     const handleCategoryChange = (
         _: React.SyntheticEvent,
         newValue: string
     ) => {
         if (newValue === "all") {
             router.push("/");
-            return;
+        } else {
+            router.push(`/?category=${newValue}`);
         }
-
-        router.push(`/?category=${newValue}`);
     };
 
     if (isReportDetail) {
+        // レポート詳細ページでは、簡素な画像ヘッダーだけ表示
         return (
             <AppBar
                 position="static"
@@ -113,46 +121,25 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                     minHeight: { xs: 56, md: 64 },
                 }}
             >
+                {/* ロゴ（左寄せ） */}
                 <Link
                     href="/"
-                    style={{
-                        display: "inline-flex",
-                        lineHeight: 1,
-                        flexShrink: 0,
-                    }}
+                    style={{ display: "inline-flex", lineHeight: 0, flexShrink: 0 }}
                 >
-                    <Box
-                        sx={{
-                            display: "grid",
-                            gap: 0.15,
+                    <Image
+                        src="/dfc-logo.png"
+                        alt="Design for Changes"
+                        width={1702}
+                        height={454}
+                        priority
+                        style={{
+                            height: "clamp(1.9rem, 3vw, 2.8rem)",
+                            width: "auto",
                         }}
-                    >
-                        <Typography
-                            component="span"
-                            sx={{
-                                fontFamily: "var(--font-display)",
-                                fontSize: { xs: "1rem", md: "1.15rem" },
-                                fontWeight: 900,
-                                letterSpacing: "0.08em",
-                                color: "text.primary",
-                            }}
-                        >
-                            {SITE_NAME}
-                        </Typography>
-                        <Typography
-                            component="span"
-                            sx={{
-                                fontSize: "0.68rem",
-                                letterSpacing: "0.06em",
-                                color: "text.secondary",
-                                textTransform: "uppercase",
-                            }}
-                        >
-                            Portfolio mock site
-                        </Typography>
-                    </Box>
+                    />
                 </Link>
 
+                {/* カテゴリタブ（デスクトップ） */}
                 {showCategoryTabs && !isMobile && (
                     <Tabs
                         value={tabValue}
@@ -186,6 +173,7 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                     </Tabs>
                 )}
 
+                {/* 区切り線（タブとナビリンクを視覚分離） */}
                 {showCategoryTabs && !isMobile && (
                     <Box
                         sx={{
@@ -196,11 +184,10 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                         }}
                     />
                 )}
-
                 {!isMobile && (
                     <Typography
                         component={Link}
-                        href={REPO_URL}
+                        href={LAB_INTRO_URL}
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{
@@ -212,20 +199,24 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                             "&:hover": { color: "primary.main" },
                         }}
                     >
-                        GitHub
+                        研究室紹介
                     </Typography>
                 )}
 
+                {/* スペーサー（ナビと検索を分離） */}
                 <Box sx={{ flex: 1 }} />
 
+                {/* 検索ボックス（右端に孤立配置） */}
                 {!isMobile && (
                     <Box sx={{ flexShrink: 0, width: 180 }}>
                         <SearchBox />
                     </Box>
                 )}
 
+                {/* モバイルメニュー */}
                 {isMobile && (
                     <>
+                        {/* モバイル時はハンバーガー + Drawerメニュー */}
                         <IconButton
                             onClick={() => setDrawerOpen(true)}
                             sx={{ color: "text.secondary" }}
@@ -271,7 +262,7 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                                     <ListItem disablePadding sx={{ mt: 1 }}>
                                         <ListItemButton
                                             component={Link}
-                                            href={REPO_URL}
+                                            href={LAB_INTRO_URL}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             onClick={() => setDrawerOpen(false)}
@@ -282,7 +273,7 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                                             }}
                                         >
                                             <ListItemText
-                                                primary="GitHub"
+                                                primary="研究室紹介"
                                                 primaryTypographyProps={{
                                                     fontSize: "0.8rem",
                                                     color: "text.secondary",

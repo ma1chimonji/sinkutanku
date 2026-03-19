@@ -11,10 +11,7 @@ export default async function HomePage() {
     return (
         <Suspense
             fallback={
-                <ReportArchiveView
-                    categories={categories}
-                    {...fallbackViewModel}
-                />
+                <ReportArchiveView {...fallbackViewModel} />
             }
         >
             <ReportArchive categories={categories} />

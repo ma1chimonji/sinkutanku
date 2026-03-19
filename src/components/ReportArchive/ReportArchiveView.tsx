@@ -3,16 +3,12 @@
 import ReportCard from "@/components/ReportCard/ReportCard";
 import { buildArchivePageUrl } from "@/lib/archive";
 import type { ArchiveViewModel } from "@/lib/archive";
-import type { Category } from "@/types/types";
 import Link from "next/link";
 import styles from "@/app/page.module.css";
 
-interface ReportArchiveViewProps extends ArchiveViewModel {
-    categories: Category[];
-}
+type ReportArchiveViewProps = ArchiveViewModel;
 
 export default function ReportArchiveView({
-    categories,
     reportData,
     currentPage,
     totalPages,
@@ -28,32 +24,27 @@ export default function ReportArchiveView({
                 className={styles.introSection}
                 aria-labelledby="home-intro-title"
             >
-                <p className={styles.introLabel}>Portfolio Mockup</p>
+                <p className={styles.introLabel}>このサイトについて</p>
                 <h1 id="home-intro-title" className={styles.introTitle}>
-                    政策やシンクタンク系の情報を、読みやすいカードUIで見せる想定の
-                    デモサイトです。
+                    政策を、デザイナー視点で整理してわかりやすく伝えるサイトです。
                 </h1>
                 <p className={styles.introText}>
-                    もともとmicroCMS運用を想定していた構成を、ポートフォリオ掲載用に
-                    仮データで静的公開できる形へ置き換えています。
+                    複雑な政策情報を、デザイン学生が図解と要約で構造化しわかりやすい資料として届けます。
                 </p>
                 <ul className={styles.introPoints}>
-                    <li>カード一覧から詳細記事へ遷移</li>
-                    <li>カテゴリ絞り込みとキーワード検索</li>
-                    <li>GitHub Pages でそのまま閲覧可能</li>
+                    <li>政策の要点をわかりやすく整理</li>
+                    <li>影響と論点を中立的に提示</li>
+                    <li>月1回の更新で最新動向を反映</li>
                 </ul>
             </section>
 
             <p className={styles.resultsInfo}>
-                仮データで公開中
-                {" · "}
                 {reportData.totalCount}件のレポート
-                {selectedCategoryName && ` · カテゴリ: ${selectedCategoryName}`}
-                {filters.q && ` · 検索: 「${filters.q}」`}
+                {selectedCategoryName && ` — カテゴリ: ${selectedCategoryName}`}
+                {filters.q && ` — 検索: 「${filters.q}」`}
                 {filters.category &&
                     !selectedCategoryName &&
-                    ` · カテゴリ: ${filters.category}`}
-                {!filters.category && categories.length > 0 && " · 画面上部でカテゴリ切替"}
+                    ` — カテゴリ: ${filters.category}`}
             </p>
 
             {reports.length > 0 ? (
