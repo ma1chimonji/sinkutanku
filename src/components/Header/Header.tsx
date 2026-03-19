@@ -3,6 +3,7 @@
 // サイト共通ヘッダーです。
 // 画面サイズと現在のURLに応じて表示を切り替えます。
 import SearchBox from "@/components/SearchBox/SearchBox";
+import { withBasePath } from "@/lib/site-config";
 import type { Category } from "@/types/types";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -86,7 +87,7 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                     }}
                 >
                     <Image
-                        src="/header-report-banner.svg"
+                        src={withBasePath("/header-report-banner.svg")}
                         alt="コラム / レポート"
                         width={620}
                         height={96}
@@ -127,7 +128,7 @@ function HeaderContent({ categories = [] }: HeaderProps) {
                     style={{ display: "inline-flex", lineHeight: 0, flexShrink: 0 }}
                 >
                     <Image
-                        src="/dfc-logo.png"
+                        src={withBasePath("/dfc-logo.png")}
                         alt="Design for Changes"
                         width={1702}
                         height={454}
