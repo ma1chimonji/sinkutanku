@@ -1,7 +1,10 @@
+"use client";
+
 // 一覧で使うレポートカードです。
 // タイトル・カテゴリ・公開日を表示して詳細ページへ遷移させます。
 import type { Report } from "@/types/types";
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./ReportCard.module.css";
 
@@ -46,13 +49,14 @@ export default function ReportCard({ report, className, backTo, animationIndex =
                 style={{ aspectRatio: "16 / 9" }}
             >
                 {report.eyecatch ? (
-                    <img
+                    <Image
                         className={styles.image}
                         src={report.eyecatch.url}
                         alt={report.title}
-                        loading="lazy"
                         width={report.eyecatch.width}
                         height={report.eyecatch.height}
+                        sizes="(max-width: 32rem) 100vw, (max-width: 64rem) 50vw, 25vw"
+                        unoptimized
                     />
                 ) : (
                     <div className={styles.imagePlaceholder} />

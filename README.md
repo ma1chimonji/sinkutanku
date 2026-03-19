@@ -1,37 +1,35 @@
-# Dfc Policy Insight
-政策情報を、デザイン学生の視点でわかりやすく再編集して公開する Next.js サイトです。
+# SINKUTANKU Portfolio Mock
 
-## 開発サーバ起動
+政策・シンクタンク系メディアを想定したポートフォリオ用の `Next.js` サイトです。  
+もともと `microCMS` 管理を前提にしていましたが、現在は仮データでそのまま見られる静的公開版として構成しています。
+
+## ローカル確認
+
 ```bash
 npm install
 npm run dev
 ```
 
-`http://localhost:3000` を開くと確認できます。
+`http://localhost:3000` で確認できます。
 
-## データ運用（複数人投稿）
-このプロジェクトは `microCMS` を本番の投稿基盤として使う想定です。  
-複数人で管理画面からレポートを追加・編集できます。
+## GitHub Pages 公開
 
-詳しい手順は以下を参照してください。
+- `main` へ push すると `.github/workflows/deploy-pages.yml` で `GitHub Pages` にデプロイされます
+- デプロイ時は `USE_MOCK_DATA=true` でビルドするため、APIキーなしで公開できます
+- 本番公開URL: `https://ma1chimonji.github.io/sinkutanku/`
 
-- `docs/content-operations.md`（投稿フロー・ロール設計）
-- `docs/microcms-schema.md`（microCMS のコンテンツ定義）
+## データソース
 
-## 環境変数
-`.env.example` をコピーして `.env.local` を作ってください。
+- 既定では `src/lib/mock-data.ts` の仮データを使います
+- `microCMS` を再接続したい場合は `.env.local` に以下を設定してください
 
 ```bash
-cp .env.example .env.local
+MICROCMS_SERVICE_DOMAIN=
+MICROCMS_API_KEY=
+USE_MOCK_DATA=false
 ```
 
-主な変数は以下です。
+## 補足
 
-- `MICROCMS_SERVICE_DOMAIN`
-- `MICROCMS_API_KEY`
-- `USE_MOCK_DATA` (`true` ならモックデータを使用)
-- `REVALIDATE_SECRET`（Webhook で即時反映する場合に使用）
-
-## 即時反映（任意）
-microCMS Webhook から `POST /api/revalidate?secret=...` を叩くと、
-トップページと詳細ページのキャッシュを即時更新できます。
+- カテゴリ絞り込み・検索・ページネーションは静的公開でも動くようにクライアント側で処理しています
+- 旧 `microCMS` 設計メモは `docs/` に残しています

@@ -1,28 +1,37 @@
-// レポート詳細ページです。
-// 1件のレポート本文を表示し、PDFがあればボタンから開けるようにします。
+import ReportBackLink from "@/components/ReportBackLink/ReportBackLink";
 import { getReportBySlug } from "@/lib/microcms";
-import { access } from "node:fs/promises";
+import { MOCK_REPORTS } from "@/lib/mock-data";
+import { withBasePath } from "@/lib/site-config";
 import { constants } from "node:fs";
+import { access } from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import styles from "./page.module.css";
 
 interface ReportDetailProps {
-    // URL の [slug] 部分（例: /reports/social-security-reform-2026）
     params: Promise<{ slug: string }>;
-    // 一覧→詳細遷移時に引き継ぐクエリ（例: ?from=/%3Fcategory%3Dsocial-security）
-    searchParams: Promise<{ from?: string }>;
 }
 
-// 記事ごとの title/description（SEO用）を動的に作成
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+    return MOCK_REPORTS.map((report) => ({ slug: report.slug }));
+}
+
 export async function generateMetadata({
     params,
 }: ReportDetailProps): Promise<Metadata> {
     const { slug } = await params;
     const report = await getReportBySlug(slug);
-    if (!report) return { title: "レポートが見つかりません" };
+
+    if (!report) {
+        return { title: "レポートが見つかりません" };
+    }
+
     return {
         title: report.title,
         description: report.description,
@@ -32,14 +41,19 @@ export async function generateMetadata({
             type: "article",
             publishedTime: report.publishedAt,
             ...(report.eyecatch && {
-                images: [{ url: report.eyecatch.url, width: report.eyecatch.width, height: report.eyecatch.height }],
+                images: [
+                    {
+                        url: report.eyecatch.url,
+                        width: report.eyecatch.width,
+                        height: report.eyecatch.height,
+                    },
+                ],
             }),
         },
     };
 }
 
 function formatDate(dateString: string): string {
-    // 表示形式: 2026年2月17日
     return new Date(dateString).toLocaleDateString("ja-JP", {
         year: "numeric",
         month: "long",
@@ -47,40 +61,42 @@ function formatDate(dateString: string): string {
     });
 }
 
-export default async function ReportDetailPage({ params, searchParams }: ReportDetailProps) {
+export default async function ReportDetailPage({ params }: ReportDetailProps) {
     const { slug } = await params;
-    const query = await searchParams;
     const report = await getReportBySlug(slug);
 
     if (!report) {
-        // slug に対応する記事がないときは 404 へ
         notFound();
     }
 
-    // PDFリンクの優先順位:
-    // 1) microCMS の file フィールド
-    // 2) microCMS の文字列URL
-    // 3) public/pdf/{slug}.pdf（ローカル配置）
-    const localPdfPath = path.join(process.cwd(), "public", "pdf", `${report.slug}.pdf`);
+    const localPdfPath = path.join(
+        process.cwd(),
+        "public",
+        "pdf",
+        `${report.slug}.pdf`
+    );
     const hasLocalPdf = await access(localPdfPath, constants.F_OK)
         .then(() => true)
         .catch(() => false);
-    const pdfUrl = report.pdf?.url ?? report.pdfUrl ?? (hasLocalPdf ? `/pdf/${report.slug}.pdf` : undefined);
+    const pdfUrl =
+        report.pdf?.url ??
+        report.pdfUrl ??
+        (hasLocalPdf ? withBasePath(`/pdf/${report.slug}.pdf`) : undefined);
     const hasPdf = Boolean(pdfUrl);
-
-    // 戻り先は from を最優先。値が不正な場合はトップへ戻す。
-    const backHref =
-        query.from && query.from.startsWith("/") && !query.from.startsWith("//")
-            ? query.from
-            : "/";
 
     return (
         <div className={styles.detailContainer}>
             <div className={styles.detailInner}>
                 <div className={styles.actionRow}>
-                    <Link href={backHref} className={styles.backLink}>
-                        ← 一覧に戻る
-                    </Link>
+                    <Suspense
+                        fallback={
+                            <Link href="/" className={styles.backLink}>
+                                ← 一覧に戻る
+                            </Link>
+                        }
+                    >
+                        <ReportBackLink className={styles.backLink} />
+                    </Suspense>
                     {hasPdf ? (
                         <a
                             href={pdfUrl}
@@ -91,7 +107,9 @@ export default async function ReportDetailPage({ params, searchParams }: ReportD
                             PDF版はこちら
                         </a>
                     ) : (
-                        <span className={`${styles.pdfButton} ${styles.pdfButtonDisabled}`}>
+                        <span
+                            className={`${styles.pdfButton} ${styles.pdfButtonDisabled}`}
+                        >
                             PDF準備中
                         </span>
                     )}
@@ -100,12 +118,14 @@ export default async function ReportDetailPage({ params, searchParams }: ReportD
                 <article className={styles.detailArticle}>
                     {report.eyecatch && (
                         <figure className={styles.heroImage}>
-                            <img
+                            <Image
                                 className={styles.heroImg}
                                 src={report.eyecatch.url}
                                 alt={report.title}
                                 width={report.eyecatch.width}
                                 height={report.eyecatch.height}
+                                sizes="(max-width: 82rem) 100vw, 82rem"
+                                unoptimized
                             />
                         </figure>
                     )}
@@ -117,21 +137,26 @@ export default async function ReportDetailPage({ params, searchParams }: ReportD
                                 style={
                                     report.category.color
                                         ? {
-                                            backgroundColor: `${report.category.color}15`,
-                                            color: report.category.color,
-                                        }
+                                              backgroundColor: `${report.category.color}15`,
+                                              color: report.category.color,
+                                          }
                                         : undefined
                                 }
                             >
                                 {report.category.name}
                             </span>
-                            <time className={styles.date} dateTime={report.publishedAt}>
+                            <time
+                                className={styles.date}
+                                dateTime={report.publishedAt}
+                            >
                                 {formatDate(report.publishedAt)}
                             </time>
                         </div>
 
                         <h1 className={styles.articleTitle}>{report.title}</h1>
-                        <p className={styles.articleDescription}>{report.description}</p>
+                        <p className={styles.articleDescription}>
+                            {report.description}
+                        </p>
 
                         {report.tags.length > 0 && (
                             <div className={styles.tags}>
