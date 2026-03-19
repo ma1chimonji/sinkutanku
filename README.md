@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dfc Policy Insight
+政策情報を、デザイン学生の視点でわかりやすく再編集して公開する Next.js サイトです。
 
-## Getting Started
-
-First, run the development server:
-
+## 開発サーバ起動
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`http://localhost:3000` を開くと確認できます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## データ運用（複数人投稿）
+このプロジェクトは `microCMS` を本番の投稿基盤として使う想定です。  
+複数人で管理画面からレポートを追加・編集できます。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+詳しい手順は以下を参照してください。
 
-## Learn More
+- `docs/content-operations.md`（投稿フロー・ロール設計）
+- `docs/microcms-schema.md`（microCMS のコンテンツ定義）
 
-To learn more about Next.js, take a look at the following resources:
+## 環境変数
+`.env.example` をコピーして `.env.local` を作ってください。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cp .env.example .env.local
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+主な変数は以下です。
 
-## Deploy on Vercel
+- `MICROCMS_SERVICE_DOMAIN`
+- `MICROCMS_API_KEY`
+- `USE_MOCK_DATA` (`true` ならモックデータを使用)
+- `REVALIDATE_SECRET`（Webhook で即時反映する場合に使用）
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 即時反映（任意）
+microCMS Webhook から `POST /api/revalidate?secret=...` を叩くと、
+トップページと詳細ページのキャッシュを即時更新できます。

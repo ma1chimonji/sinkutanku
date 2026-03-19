@@ -1,0 +1,22 @@
+/* ページ遷移時の演出（控えめなフェードイン） */
+.page {
+    animation: page-enter 480ms ease-out;
+}
+
+@keyframes page-enter {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page {
+        animation: none;
+    }
+}

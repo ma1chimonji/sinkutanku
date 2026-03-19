@@ -1,0 +1,105 @@
+/* ============================================================
+   Layout Utilities — 12-Column Ratio Grid
+   ============================================================ */
+/* このファイルは、複数ページで使い回せるレイアウト部品を置く場所です。 */
+
+/* Container Wrapper */
+.container {
+    /* ページ本文を中央に寄せ、左右余白を確保 */
+    container-type: inline-size;
+    max-inline-size: var(--content-max);
+    margin-inline: auto;
+    padding-inline: var(--space-3);
+}
+
+/* 12-Column Grid */
+.grid-12 {
+    /* 12分割グリッド。必要な列数だけ横幅を使える */
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-3);
+}
+
+/* Column Spans */
+.col-full {
+    grid-column: 1 / -1;
+}
+
+.col-main {
+    grid-column: span 8;
+}
+
+.col-side {
+    grid-column: span 4;
+}
+
+.col-half {
+    grid-column: span 6;
+}
+
+.col-third {
+    grid-column: span 4;
+}
+
+.col-two-thirds {
+    grid-column: span 8;
+}
+
+/* Container Query: stack on narrow */
+@container (max-width: 48rem) {
+    /* 画面が狭いときは2カラム系を1カラムに落として読みやすくする */
+
+    .col-main,
+    .col-side,
+    .col-half,
+    .col-third,
+    .col-two-thirds {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Auto-fit Card Grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(14rem, 28%, 20rem), 1fr));
+    gap: var(--space-3);
+}
+
+/* Article Body — Readable Width */
+.article-body {
+    max-inline-size: var(--article-max);
+    margin-inline: auto;
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+}
+
+/* Sticky Sidebar */
+.sticky-panel {
+    position: sticky;
+    top: var(--space-4);
+    align-self: start;
+}
+
+/* Section Spacing */
+.section {
+    padding-block: var(--space-5);
+}
+
+.section+.section {
+    border-block-start: 1px solid var(--color-border-light);
+}
+
+/* Horizontal Scroll Track (for category bar) */
+.scroll-track {
+    /* タブのような横並び要素を、スマホで横スクロール可能にする */
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-block: var(--space-1);
+}
+
+.scroll-track::-webkit-scrollbar {
+    display: none;
+}

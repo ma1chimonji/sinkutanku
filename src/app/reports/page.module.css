@@ -1,0 +1,106 @@
+/* ============================================================
+   Reports List Page Styles
+   ============================================================ */
+/* レポート一覧ページ専用のスタイルです。 */
+
+.reportsContainer {
+    container-type: inline-size;
+}
+
+.reportsInner {
+    /* 一覧は画面いっぱい使う方針なので max 幅制限は外す */
+    max-inline-size: none;
+    inline-size: 100%;
+    padding-inline: clamp(0.4rem, 0.6rem + 0.6vw, 1.25rem);
+    padding-block: var(--space-4);
+}
+
+.pageTitle {
+    font-size: var(--text-h1);
+    margin-block-end: var(--space-2);
+}
+
+.pageDescription {
+    font-size: var(--text-lead);
+    color: var(--color-text-secondary);
+    margin-block-end: var(--space-4);
+    max-inline-size: 60ch;
+}
+
+.resultsInfo {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-block-end: var(--space-3);
+}
+
+.cardGrid {
+    /* カード幅は固定寄りにして、件数が少なくても巨大化させない */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 22rem));
+    justify-content: start;
+    gap: var(--space-2);
+}
+
+@container (max-width: 42rem) {
+    /* スマホでは1列に落とす */
+    .cardGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+    margin-block-start: var(--space-5);
+    flex-wrap: wrap;
+}
+
+.pageLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 2.5em;
+    block-size: 2.5em;
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.pageLink:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background-color: var(--color-primary-bg);
+}
+
+.pageLinkActive {
+    border-color: var(--color-primary);
+    color: var(--color-surface);
+    background-color: var(--color-primary);
+}
+
+.pageLinkActive:hover {
+    background-color: var(--color-primary-dark);
+    color: var(--color-surface);
+}
+
+/* Empty state */
+.emptyState {
+    text-align: center;
+    padding-block: var(--space-6);
+    color: var(--color-text-muted);
+}
+
+.emptyIcon {
+    font-size: var(--text-hero);
+    margin-block-end: var(--space-2);
+}
+
+.emptyText {
+    font-size: var(--text-lead);
+}

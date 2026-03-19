@@ -1,0 +1,245 @@
+/* ============================================================
+   Report Detail Page Styles
+   ============================================================ */
+/* レポート詳細ページ専用のスタイルです。 */
+
+.detailContainer {
+    container-type: inline-size;
+}
+
+.detailInner {
+    /* 本文は読みやすさ重視で、左右余白を確保して中央寄せ */
+    max-inline-size: var(--content-max);
+    margin-inline: auto;
+    padding-inline: var(--space-3);
+    padding-block: var(--space-4);
+}
+
+/* Single-column article layout */
+.detailArticle {
+    inline-size: 100%;
+}
+
+/* Hero Image */
+.heroImage {
+    /* 記事上部のメイン画像。比率を固定して見た目を安定させる */
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    margin-block-end: var(--space-4);
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.heroImg {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+}
+
+/* Article Header */
+.articleHeader {
+    /* タイトル・カテゴリ・日付エリア */
+    max-inline-size: 50rem;
+    margin-inline: auto;
+    margin-block-end: var(--space-4);
+    padding-block-end: var(--space-3);
+    border-block-end: 1px solid var(--color-border);
+}
+
+.metaRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-block-end: var(--space-2);
+}
+
+.categoryTag {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    padding: 0.25em 0.8em;
+    border-radius: 999px;
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+}
+
+.date {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.articleTitle {
+    font-size: var(--text-h1);
+    margin-block-end: var(--space-2);
+    line-height: var(--leading-tight);
+}
+
+.articleDescription {
+    font-size: var(--text-lead);
+    color: #111111;
+    font-weight: 700;
+    line-height: 1.9;
+    letter-spacing: 0.01em;
+}
+
+/* Tags */
+.tags {
+    display: flex;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+    margin-block-start: var(--space-2);
+}
+
+.tag {
+    font-size: var(--text-xs);
+    padding: 0.2em 0.6em;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+}
+
+/* Article Content */
+.articleContent {
+    /* 本文エリア。可読性優先で黒・太め・広めの行間 */
+    max-inline-size: 50rem;
+    margin-inline: auto;
+    font-size: var(--text-body);
+    color: #111111;
+    font-weight: 700;
+    line-height: 1.95;
+    letter-spacing: 0.01em;
+}
+
+.articleContent h2 {
+    font-size: var(--text-h2);
+    margin-block: var(--space-5) var(--space-3);
+    padding-block-end: var(--space-1);
+    border-block-end: 2px solid var(--color-primary);
+}
+
+.articleContent h3 {
+    font-size: var(--text-h3);
+    margin-block: var(--space-4) var(--space-2);
+}
+
+.articleContent p {
+    margin-block-end: var(--space-3);
+    color: #111111;
+    font-weight: 700;
+}
+
+.articleContent ul,
+.articleContent ol {
+    margin-block-end: var(--space-3);
+    padding-inline-start: var(--space-4);
+}
+
+.articleContent ul {
+    list-style: disc;
+}
+
+.articleContent ol {
+    list-style: decimal;
+}
+
+.articleContent li {
+    margin-block-end: var(--space-1);
+    color: #111111;
+    font-weight: 700;
+}
+
+.articleContent blockquote {
+    border-inline-start: 4px solid var(--color-primary);
+    padding-inline-start: var(--space-3);
+    padding-block: var(--space-2);
+    margin-block: var(--space-3);
+    background-color: var(--color-primary-bg);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-style: normal;
+    color: #111111;
+    font-weight: 700;
+}
+
+.articleContent img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius);
+    margin-block: var(--space-4);
+    box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+/* Back Link */
+.actionRow {
+    /* 「戻る」と「PDF」ボタンの横並びエリア */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-block-end: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-primary);
+    transition: gap var(--transition-fast);
+}
+
+.backLink:hover {
+    gap: var(--space-2);
+}
+
+.pdfButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65em 1em;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.pdfButton:hover {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    color: #ffffff;
+}
+
+.pdfButtonDisabled,
+.pdfButtonDisabled:hover {
+    /* PDF未登録時の見た目（押せない状態） */
+    background-color: var(--color-surface-alt);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+    cursor: default;
+}
+
+/* Not Found */
+.notFound {
+    text-align: center;
+    padding-block: var(--space-6);
+}
+
+.notFoundIcon {
+    font-size: var(--text-hero);
+    margin-block-end: var(--space-2);
+}
+
+.notFoundText {
+    font-size: var(--text-lead);
+    color: var(--color-text-muted);
+    margin-block-end: var(--space-3);
+}
